@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addMessage } from "../Actions/listActions";
 
-/* NOW MANAGE STATE USING REDUX */
-/* Now remove items using state. */
+//find a way to display tocal storage
 
 class ToDo extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      toDoVal: ""
+      toDoVal: "" //,
+      //localStorage: []
     };
   }
 
@@ -35,7 +35,53 @@ class ToDo extends Component {
     //console.log("delete");
   };
 
+  //storing list in local storage
+
+  componentWillMount() {
+    /*
+    localStorage.getItem("test1") &&
+      this.setState({
+        localStorage: localStorage.getItem("test1"),
+        isLoading: false
+      });
+    */
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    localStorage.setItem("test1", nextProps.toDoArr);
+  }
+
   render() {
+    let displayList = this.props.toDoArr.map((val, idx) => {
+      return (
+        <li id={val} key={idx}>
+          {val}
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={this.handleDelete.bind(this, val)}
+          >
+            x
+          </button>
+        </li>
+      );
+    });
+
+    const s2 = localStorage.getItem("test1").split(",");
+    /*
+    const s2Mapped = s2.map((val, idx) => {
+      return (
+        <li id={val} key={idx}>
+          {val}
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={this.handleDelete.bind(this, val)}
+          >
+            x
+          </button>
+        </li>
+      );
+    });
+    */
     return (
       <div className="container">
         <br />
@@ -53,21 +99,11 @@ class ToDo extends Component {
             onClick={this.handleClick.bind(this)}
           />
         </form>
-        <ul>
-          {this.props.toDoArr.map((val, idx) => {
-            return (
-              <li id={val} key={idx}>
-                {val}
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={this.handleDelete.bind(this, val)}
-                >
-                  x
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        {/*
+        <ul>{displayList}</ul>
+        <ul>{s2Mapped}</ul>
+        */}
+        {displayList}
       </div>
     );
   }
